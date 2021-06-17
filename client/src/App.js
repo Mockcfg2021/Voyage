@@ -1,11 +1,11 @@
 import "./App.css";
-import { AccountBox } from "./components/accountBox";
+import { Auth } from "./components/Auth";
 
 
 function App() {
   return (
     <div className="AppContainer">
-      <AccountBox />
+      <Auth />
     </div>
   );
 }
