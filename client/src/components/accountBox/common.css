@@ -1,0 +1,134 @@
+.AuthBoxContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.FormContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.MutedLink {
+  font-size: 11px;
+  color: rgba(200, 200, 200, 0.8);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.MutedLink:hover {
+  color: rgb(156, 150, 150);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.BoldLink {
+  font-size: 11px;
+  color: rgb(122, 158, 159);
+  font-weight: 500;
+  text-decoration: none;
+  margin: 0 4px;
+}
+
+.BoldLink:hover {
+  text-decoration: none;
+}
+
+.Input {
+  width: 100%;
+  height: 42px;
+  outline: none;
+  border: 1px solid rgba(200, 200, 200, 0.3);
+  padding: 0px 10px;
+  border-bottom: 1.4px solid transparent;
+  transition: all 200ms ease-in-out;
+  font-size: 12px;
+  border-bottom: 1.5px solid rgba(200, 200, 200, 0.4);
+}
+.Input::placeholder {
+  color: rgba(200, 200, 200, 1);
+}
+
+.Input:focus {
+  outline: none;
+  border-bottom: 2px solid rgb(122, 158, 159);
+}
+.SubmitButton {
+  width: 100%;
+  padding: 11px 40%;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 100px 100px 100px 100px;
+  cursor: pointer;
+  transition: all, 240ms ease-in-out;
+  background: rgb(122, 158, 159);
+  background: linear-gradient(
+    58deg,
+    rgba(122, 158, 159, 1) 20%,
+    rgba(122, 158, 159, 1) 100%
+  );
+}
+.SubmitButton:hover {
+  filter: brightness(1.03);
+}
+
+:root {
+  --input-padding-x: 1.5rem;
+  --input-padding-y: 0.75rem;
+}
+
+input:focus,
+select:focus,
+button:focus {
+  outline: none;
+}
+
+.form-label-group {
+  position: relative;
+  z-index: 1;
+}
+.form-label-group > input,
+.form-label-group > label {
+  padding: var(--input-padding-y);
+}
+
+.form-label-group > label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  line-height: 1.5;
+  font-size: 12px;
+  color: rgba(200, 200, 200, 1);
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  transition: all 0.1s ease-in-out;
+}
+
+.form-label-group input::-webkit-input-placeholder {
+  color: transparent;
+}
+
+.form-label-group input::placeholder {
+  color: transparent;
+}
+
+.form-label-group input:not(:placeholder-shown) {
+  padding-top: calc(var(--input-padding-y) + var(--input-padding-y) * (2 / 3));
+  padding-bottom: calc(var(--input-padding-y) / 3);
+}
+
+.form-label-group input:not(:placeholder-shown) ~ label {
+  padding-top: calc(var(--input-padding-y) / 3);
+  padding-bottom: calc(var(--input-padding-y) / 3);
+  font-size: 11px;
+  color: rgba(200, 200, 200, 1);
+}
