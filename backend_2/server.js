@@ -1,12 +1,19 @@
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const port = 3000;
+const functions = require('firebase-functions');
 
 var app = express();
+const admin = require('firebase-admin');
+admin.initializeApp();
+const db = admin.firestore();
+
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const conn = require("./firebase_connect");
+const firebase = conn;
 
 
 app.listen(port,function(err,data){
@@ -16,15 +23,45 @@ app.listen(port,function(err,data){
         console.log("connected");
 });
 
+app.post("/getdoc",(req,res)=> {
+
+  var docRef = db.collection("Users");
+
+  docRef.get().then((doc) => {
+      if (doc.exists) {
+          console.log("Document data:", doc.data());
+      } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+      }
+  }).catch((error) => {
+      console.log("Error getting document:", error);
+  });
+})
+
 app.post("/register", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     var user_id = null;
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
-  .then((userCredential) => {
-      const user = userCredential.user;
-      user_id = user.uid;
+    .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user.uid);
+        user_id = user.uid;
+    })
+    .then(() =>{
+      console.log(user_id);
+        let docRef=db.collection('Users').doc(user_id).set({
+          email:req.body.email,
+          age:req.body.age
+        })
+        .then(() => {
+            res.json({uid : user_id, err_msg : null});
+        })
+        .catch((error) => {
+            res.json({uid : null, err_msg : error});
+        });
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -32,19 +69,8 @@ app.post("/register", (req, res) => {
       res.json({uid : null, err_msg : errorMessage});
       // ..
     });
+  });
 
-    if(user_id != null){
-        let docRef=db.collection('Users').doc(user_id).set({
-            email:req.body.user.email,
-            age:req.body.user.age
-        }).then(() => {
-            res.json({uid : user_id, err_msg : null});
-        })
-        .catch((error) => {
-            res.json({uid : null, err_msg : error});
-        });
-    }
-});
 
 app.post("/login", (req, res) => {
     const email = req.body.email;
@@ -110,5 +136,6 @@ app.post("/signup",function(req){
     return username;
 })
 
+// exports.api = functions.region('asia-east2').https.onRequest(app);
 
 
