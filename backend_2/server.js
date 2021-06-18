@@ -1,4 +1,3 @@
-
 const functions = require('firebase-functions');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -8,7 +7,6 @@ const port = 3000;
 var app = express();
 
 
-var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -26,20 +24,30 @@ app.listen(port,function(err,data){
         console.log("connected");
 });
 
-app.get("/", (req, res) => {
-    res.send("hi");
-});
-
 app.post("/register", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     var user_id = null;
 
     firebase.auth().createUserWithEmailAndPassword(email, password)
-  .then((userCredential) => {
-      const user = userCredential.user;
-      user_id = user.uid;
-      res.json({uid : user_id, err_msg : null});
+    .then((userCredential) => {
+        const user = userCredential.user;
+        console.log(user.uid);
+        user_id = user.uid;
+    })
+    .then(() =>{
+      console.log(user_id);
+        let docRef=db.collection('Users').doc(user_id).set({
+          email:req.body.email,
+          userName:req.body.userName,
+          number:req.body.number
+        })
+        .then(() => {
+            res.json({uid : user_id, err_msg : null});
+        })
+        .catch((error) => {
+            res.json({uid : null, err_msg : error});
+        });
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -47,30 +55,8 @@ app.post("/register", (req, res) => {
       res.json({uid : null, err_msg : errorMessage});
       // ..
     });
+  });
 
-app.post("/details/:id", (req, res) => {
-        let docRef=db.collection('Users').doc(req.params.id).set({
-            email:req.body.user.email,
-            age:req.body.user.age
-        }).then(() => {
-            res.json({uid : user_id, err_msg : null});
-        })
-        .catch((error) => {
-            res.json({uid : null, err_msg : error});
-        });
-    });
-    // if(user_id != null){
-        // let docRef=db.collection('Users').doc(user_id).set({
-        //     email:req.body.user.email,
-        //     age:req.body.user.age
-        // }).then(() => {
-        //     res.json({uid : user_id, err_msg : null});
-        // })
-        // .catch((error) => {
-        //     res.json({uid : null, err_msg : error});
-        // });
-    
-});
 
 app.post("/login", (req, res) => {
     const email = req.body.email;
@@ -92,7 +78,8 @@ app.post("/login", (req, res) => {
 app.put("/editUser", (req, res) => {
     db.collection('Users').doc(req.body.uid).update({
         email:req.body.email,
-        age:req.body.age
+          userName:req.body.userName,
+          number:req.body.number
       }).then(() => {
         res.json({msg : "Document successfully updated!", err : null});
     })
@@ -136,5 +123,4 @@ app.post("/signup",function(req){
     return username;
 })
 
-
-
+// exports.api = functions.region('asia-east2').https.onRequest(app);
