@@ -16,6 +16,66 @@ app.listen(port,function(err,data){
         console.log("connected");
 });
 
+app.post("/register", (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    var user_id = null;
+
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+      const user = userCredential.user;
+      user_id = user.uid;
+    })
+    .catch((error) => {
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      res.json({uid : null, err_msg : errorMessage});
+      // ..
+    });
+
+    if(user_id != null){
+        let docRef=db.collection('Users').doc(user_id).set({
+            email: 'ritikgupta89369@gmail.com',
+            password: 'hello123'
+        }).then(() => {
+            res.json({uid : user_id, err_msg : null});
+        })
+        .catch((error) => {
+            res.json({uid : null, err_msg : error});
+        });
+    }
+});
+
+app.post("/login", (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+    firebase.auth().signInWithEmailAndPassword(email, password)
+  .then((userCredential) => {
+    // Signed in
+    var user = userCredential.user;
+    res.json({uid : user.uid, err_msg : null});
+    // ...
+  })
+  .catch((error) => {
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    res.json({uid : null, err_msg : errorMessage});
+  });
+});
+
+app.put("/editUser/:uid", (req, res) => {
+    
+})
+
+app.get("/logout", (req, res) => {
+
+    firebase.auth().signOut().then(() => {
+        // Sign-out successful.
+      }).catch((error) => {
+        // An error happened.
+      });
+})
+
 app.post("/signup",function(req){
     //insert
     const UsersRef = conn.database().ref('Users/');
