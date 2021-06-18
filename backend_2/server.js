@@ -1,19 +1,21 @@
 
+const functions = require('firebase-functions');
 const express = require('express');
 const bodyParser = require('body-parser');
 const port = 3000;
-const functions = require('firebase-functions');
+
 
 var app = express();
-const admin = require('firebase-admin');
-admin.initializeApp();
-const db = admin.firestore();
+
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-const conn = require("./firebase_connect");
-const firebase = conn;
+
+
+const firebase = require("./firebase_connect");
+const db = firebase.firestore();
+
 
 
 app.listen(port,function(err,data){
@@ -22,22 +24,6 @@ app.listen(port,function(err,data){
     else
         console.log("connected");
 });
-
-app.post("/getdoc",(req,res)=> {
-
-  var docRef = db.collection("Users");
-
-  docRef.get().then((doc) => {
-      if (doc.exists) {
-          console.log("Document data:", doc.data());
-      } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
-      }
-  }).catch((error) => {
-      console.log("Error getting document:", error);
-  });
-})
 
 app.post("/register", (req, res) => {
     const email = req.body.email;
@@ -115,18 +101,18 @@ app.get("/logout", (req, res) => {
 
 app.post("/signup",function(req){
     //insert
-    const UsersRef = conn.database().ref('Users/');
+    const UsersRef = firebase.database().ref('Users/');
     const user_id = UsersRef.push().key;
     let username = req.body.username;
     console.log(req.body);
-    conn.database().ref("Users/"+user_id).set({
+    firebase.database().ref("Users/"+user_id).set({
         gender: req.body.gender,
         username:req.body.username,
         mail: req.body.mail,   
     });
     // console.log(UsersRef);
     //retrieve
-    var starCountRef = conn.database().ref('Users/' + 'SMopd2FsfEMl2b3k5vb1wXpu6Sz2');
+    var starCountRef = firebase.database().ref('Users/' + 'SMopd2FsfEMl2b3k5vb1wXpu6Sz2');
     starCountRef.on('value', (snapshot) => {
         console.log(snapshot.key);
     const data = snapshot.val();
