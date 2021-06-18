@@ -64,8 +64,17 @@ app.post("/login", (req, res) => {
 });
 
 app.put("/editUser/:uid", (req, res) => {
-    
-})
+    db.collection('Users').doc(req.params.uid).update({
+        email:req.body.user.email,
+        password:req.body.user.password,
+      }).then(() => {
+        res.json({msg : "Document successfully updated!", err : null});
+    })
+    .catch((error) => {
+        // The document probably doesn't exist.
+        res.json({msg : null, err : error});
+    });
+});
 
 app.get("/logout", (req, res) => {
 
