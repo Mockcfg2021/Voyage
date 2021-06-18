@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Auth } from "./components/Auth";
 import { Home } from "./components/common/home";
 import Editprofile from "./components/Auth/editprofile.js";
+import ForgotPassword from "./components/Auth/forgotPassword";
 import Test from "./components/Test/Test";
 import Test1 from "./components/Test/Tes1";
 
@@ -17,6 +18,12 @@ const App = () => {
           path="/editprofile/:id"
           component={Editprofile}
           name="editprofile"
+          exact
+        />
+        <Route
+          path="/forgotPassword/:id"
+          component={ForgotPassword}
+          name="forgotpassword"
           exact
         />
         <Route path="/test" component={Test} exact />
