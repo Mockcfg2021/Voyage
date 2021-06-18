@@ -4,6 +4,7 @@ import { Auth } from "./components/Auth";
 import { Home } from "./components/common/home";
 import Editprofile from "./components/Auth/editprofile.js";
 import Test from "./components/Test/Test";
+import Test1 from "./components/Test/Tes1";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           exact
         />
         <Route path="/test" component={Test} exact />
+        <Route path="/tes1" component={Test1} exact />
       </Switch>
     </Router>
   );
