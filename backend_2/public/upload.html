@@ -1,0 +1,41 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Video Upload</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        <label>Select video:</label>
+        <input type="file" id="vid" name="video" accept="video/*">
+        <input type="submit">
+    </form>
+
+
+    <script>
+
+        let formData = new FormData();
+        let input = document.getElementById("vid");
+        console.log(input.files);
+        formData.append("video", input.files[0]);
+
+        fetch("http://localhost:3000/upload", {
+            method: "POST",
+            body: formData,
+        })
+        .then(function (response) {
+            return response.json();
+        })
+        .then((res) => {
+            //successful video upload
+            console.log('yess video uploaded successfully')
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    </script>
+</body>
+</html>

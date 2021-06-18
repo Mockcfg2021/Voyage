@@ -1,3 +1,9 @@
+require('dotenv').config();
+const saltedMd5=require('salted-md5')
+const path=require('path');
+const multer=require('multer')
+const upload=multer({storage: multer.memoryStorage()})
+const fire = require("firebase");
 const functions = require('firebase-functions');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -100,27 +106,34 @@ app.get("/logout", (req, res) => {
       });
 })
 
- 
+app.post('/upload',upload.single('file'),async(req,res)=>{
+    console.log(req);
+    const name = saltedMd5(req.file.originalname, 'SUPER-S@LT!')
+    const fileName = name + path.extname(req.file.originalname)
+    await app.locals.bucket.file(fileName).createWriteStream().end(req.file.buffer)
+    res.send('done');
+    })
 
 app.get("/google/auth", (req, res) => {
-    var provider = new firebase.auth.GoogleAuthProvider();
-    firebase.auth()
-  .getRedirectResult()
-  .then((result) => {
-    if (result.credential) {
-      /** @type {firebase.auth.OAuthCredential} */
-      var credential = result.credential;
+    var provider = new fire.auth.GoogleAuthProvider();
 
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      var token = credential.accessToken;
-      // ...
-    }
+    console.log("IN");
+    firebase.auth()
+  .signInWithPopup(provider)
+  .then((result) => {
+    /** @type {firebase.auth.OAuthCredential} */
+    var credential = result.credential;
+
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    var token = credential.accessToken;
     // The signed-in user info.
     var user = result.user;
+    // ...
   }).catch((error) => {
     // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
+    console.log(errorMessage);
     // The email of the user's account used.
     var email = error.email;
     // The firebase.auth.AuthCredential type that was used.
