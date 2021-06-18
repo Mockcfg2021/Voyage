@@ -1,16 +1,23 @@
+
+const functions = require('firebase-functions');
 const express = require('express');
 const bodyParser = require('body-parser');
 const port = 3000;
-var admin = require("firebase-admin");
-admin.initializeApp();
+
+
+var app = express();
+
 
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-const conn = require("./firebase_connect");
-const firebase = conn;
-let db=admin.firestore();
+
+
+const firebase = require("./firebase_connect");
+const db = firebase.firestore();
+
+
 
 app.listen(port,function(err,data){
     if(err)
@@ -82,10 +89,10 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.put("/editUser/:uid", (req, res) => {
-    db.collection('Users').doc(req.params.uid).update({
-        email:req.body.user.email,
-        age:req.body.user.age
+app.put("/editUser", (req, res) => {
+    db.collection('Users').doc(req.body.uid).update({
+        email:req.body.email,
+        age:req.body.age
       }).then(() => {
         res.json({msg : "Document successfully updated!", err : null});
     })
@@ -108,18 +115,18 @@ app.get("/logout", (req, res) => {
 
 app.post("/signup",function(req){
     //insert
-    const UsersRef = conn.database().ref('Users/');
+    const UsersRef = firebase.database().ref('Users/');
     const user_id = UsersRef.push().key;
     let username = req.body.username;
     console.log(req.body);
-    conn.database().ref("Users/"+user_id).set({
+    firebase.database().ref("Users/"+user_id).set({
         gender: req.body.gender,
         username:req.body.username,
         mail: req.body.mail,   
     });
     // console.log(UsersRef);
     //retrieve
-    var starCountRef = conn.database().ref('Users/' + 'SMopd2FsfEMl2b3k5vb1wXpu6Sz2');
+    var starCountRef = firebase.database().ref('Users/' + 'SMopd2FsfEMl2b3k5vb1wXpu6Sz2');
     starCountRef.on('value', (snapshot) => {
         console.log(snapshot.key);
     const data = snapshot.val();
