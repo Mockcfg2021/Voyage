@@ -100,27 +100,56 @@ app.get("/logout", (req, res) => {
       });
 })
 
-app.post("/signup",function(req){
-    //insert
-    const UsersRef = firebase.database().ref('Users/');
-    const user_id = UsersRef.push().key;
-    let username = req.body.username;
-    console.log(req.body);
-    firebase.database().ref("Users/"+user_id).set({
-        gender: req.body.gender,
-        username:req.body.username,
-        mail: req.body.mail,   
-    });
-    // console.log(UsersRef);
-    //retrieve
-    var starCountRef = firebase.database().ref('Users/' + 'SMopd2FsfEMl2b3k5vb1wXpu6Sz2');
-    starCountRef.on('value', (snapshot) => {
-        console.log(snapshot.key);
-    const data = snapshot.val();
-    console.log(data);
-    });
-    // callback(null,{"statuscode":200,"message":"user inserted"});
-    return username;
+ 
+
+app.get("/google/auth", (req, res) => {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth()
+  .getRedirectResult()
+  .then((result) => {
+    if (result.credential) {
+      /** @type {firebase.auth.OAuthCredential} */
+      var credential = result.credential;
+
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = credential.accessToken;
+      // ...
+    }
+    // The signed-in user info.
+    var user = result.user;
+  }).catch((error) => {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    // ...
+  });
 })
+
+// app.post("/signup",function(req){
+//     //insert
+//     const UsersRef = firebase.database().ref('Users/');
+//     const user_id = UsersRef.push().key;
+//     let username = req.body.username;
+//     console.log(req.body);
+//     firebase.database().ref("Users/"+user_id).set({
+//         gender: req.body.gender,
+//         username:req.body.username,
+//         mail: req.body.mail,   
+//     });
+//     // console.log(UsersRef);
+//     //retrieve
+//     var starCountRef = firebase.database().ref('Users/' + 'SMopd2FsfEMl2b3k5vb1wXpu6Sz2');
+//     starCountRef.on('value', (snapshot) => {
+//         console.log(snapshot.key);
+//     const data = snapshot.val();
+//     console.log(data);
+//     });
+//     // callback(null,{"statuscode":200,"message":"user inserted"});
+//     return username;
+// })
 
 // exports.api = functions.region('asia-east2').https.onRequest(app);
