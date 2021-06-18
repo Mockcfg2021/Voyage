@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import validate from "./validate";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import axios from "axios";
 
 function SignupForm(props) {
   const { switchToSignin } = props;
+  const [error, setError] = useState("");
+  const [uid, setUid] = useState("");
+  const history = useHistory();
   const [values, setValues] = useState({
     userName: "",
     number: "",
@@ -15,19 +19,58 @@ function SignupForm(props) {
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
     setErrors({});
+    setError("");
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setErrors(validate(values));
     console.log(errors);
+    if (
+      !errors.email &&
+      !errors.password &&
+      !errors.confirmPassword &&
+      !errors.number &&
+      !errors.userName
+    ) {
+      axios
+        .post("http://localhost:5000/register", {
+          userName: values.userName,
+          number: values.number,
+          email: values.email,
+          password: values.password,
+          confirmPassword: values.confirmPassword,
+        })
+        .then((res) => {
+          console.log(res.data.err_msg);
+          setUid(res.data.uid);
+          setError(res.data.err_msg);
+          if (res.data.uid) {
+            localStorage.setItem("userId", JSON.stringify(res.data.uid));
+            history.push("/");
+          }
+        })
+        .catch((error) => console.log(error));
+    }
   };
 
-  console.log(values);
-  console.log(errors);
+  //console.log(values);
+  //console.log(errors);
   return (
     <>
       <div className="AuthBoxContainer">
+        {error && (
+          <p
+            style={{
+              color: "red",
+              fontSize: "12px",
+              marginTop: "-15px",
+              marginBottom: "2px",
+            }}
+          >
+            {error}
+          </p>
+        )}
         <form className="FormContainer" onSubmit={handleSubmit}>
           <div className="form-label-group">
             <input

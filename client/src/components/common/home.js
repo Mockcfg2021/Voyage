@@ -2,11 +2,22 @@ import { Container, Row, Col, Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "./styles/home.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
+
 export const Home = () => {
   const userName = "Shreya Maheshwari";
   var res = userName.split(" ");
   const id = "1";
   console.log(res);
+
+  const onLogout = () => {
+    console.log("hello");
+    localStorage.removeItem("userId");
+    axios.get("http://localhost:5000/logout").then((res) => {
+      console.log(res)
+    });
+  };
+
   const getFirstLetter = (name) => {
     return name.substring(0, 1).toUpperCase();
   };
@@ -55,8 +66,8 @@ export const Home = () => {
                         Edit profile
                       </Link>
                     </NavDropdown.Item>
-                    <NavDropdown.Item href="#action/3.2">
-                      Logout
+                    <NavDropdown.Item>
+                      <span onClick={onLogout}>Logout</span>
                     </NavDropdown.Item>
                   </NavDropdown>
                   <Row>
@@ -75,7 +86,7 @@ export const Home = () => {
           </Col>
         </Row>
       </Container>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      {/* <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <a className="navbar-brand" href="#">
           Navbar
         </a>
@@ -149,7 +160,7 @@ export const Home = () => {
             </button>
           </form>
         </div>
-      </nav>
+      </nav> */}
     </>
   );
 };

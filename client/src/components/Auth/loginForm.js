@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import "./common.css";
 import validate from "./validate";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import swal from "@sweetalert/with-react";
+import axios from "axios";
 
 export function LoginForm(props) {
   const { switchToSignup } = props;
@@ -10,6 +12,9 @@ export function LoginForm(props) {
     password: "",
   });
   const [errors, setErrors] = useState({});
+  const [error, setError] = useState("");
+  const [uid, setUid] = useState("");
+  const history = useHistory();
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
     setErrors({});
@@ -19,12 +24,48 @@ export function LoginForm(props) {
     event.preventDefault();
     setErrors(validate(values));
     console.log(errors);
+    if (!errors.email && !errors.password) {
+      axios
+        .post("http://localhost:5000/login", {
+          email: values.email,
+          password: values.password,
+        })
+        .then((res) => {
+          console.log(res.data);
+          setUid(res.data.uid);
+          setError(res.data.err_msg);
+          if (res.data.uid) {
+            localStorage.setItem("userId", JSON.stringify(res.data.uid));
+            history.push("/");
+          }
+        }).catch((err)=>console.log(err));
+    }
+  };
+
+  const handleForgotPassword = (e) => {
+    swal(
+      "",
+      "Please check your mail and follow the link to reset your password.",
+      "info"
+    );
   };
 
   console.log(values);
   console.log(errors);
   return (
     <div className="AuthBoxContainer">
+      {error && (
+        <p
+          style={{
+            color: "red",
+            fontSize: "12px",
+            marginTop: "-15px",
+            marginBottom: "2px",
+          }}
+        >
+          {error}
+        </p>
+      )}
       <form className="FormContainer" onSubmit={handleSubmit}>
         <div className="form-label-group">
           <input
@@ -70,9 +111,13 @@ export function LoginForm(props) {
           Signin
         </button>
       </form>
-      <a className="MutedLink" href="#" style={{ marginTop: "5px" }}>
+      <p
+        className="MutedLink"
+        onClick={handleForgotPassword}
+        style={{ marginTop: "5px", marginBottom: "0px", cursor: "pointer" }}
+      >
         Forget your password?
-      </a>
+      </p>
       <Link to="/auth/signup" className="MutedLink">
         Don't have an accoun?{" "}
         <span className="BoldLink" onClick={switchToSignup}>
