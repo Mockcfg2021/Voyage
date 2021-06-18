@@ -35,8 +35,8 @@ app.post("/register", (req, res) => {
 
     if(user_id != null){
         let docRef=db.collection('Users').doc(user_id).set({
-            email: 'ritikgupta89369@gmail.com',
-            password: 'hello123'
+            email:req.body.user.email,
+            age:req.body.user.age
         }).then(() => {
             res.json({uid : user_id, err_msg : null});
         })
@@ -66,7 +66,7 @@ app.post("/login", (req, res) => {
 app.put("/editUser/:uid", (req, res) => {
     db.collection('Users').doc(req.params.uid).update({
         email:req.body.user.email,
-        password:req.body.user.password,
+        age:req.body.user.age
       }).then(() => {
         res.json({msg : "Document successfully updated!", err : null});
     })
@@ -80,8 +80,10 @@ app.get("/logout", (req, res) => {
 
     firebase.auth().signOut().then(() => {
         // Sign-out successful.
+        console.log("yes");
       }).catch((error) => {
         // An error happened.
+        console.error(error);
       });
 })
 
