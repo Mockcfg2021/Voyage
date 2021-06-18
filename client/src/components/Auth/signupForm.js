@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import validate from "./validate";
+import { Link } from "react-router-dom";
+
 function SignupForm(props) {
   const { switchToSignin } = props;
   const [values, setValues] = useState({
@@ -125,12 +127,12 @@ function SignupForm(props) {
             Signup
           </button>
         </form>
-        <a className="MutedLink" href="#">
+        <Link to="/auth/signin" className="MutedLink">
           Already have an account?
-          <span className="BoldLink" href="#" onClick={switchToSignin}>
+          <span className="BoldLink" onClick={switchToSignin}>
             Signin
           </span>
-        </a>
+        </Link>
       </div>
     </>
   );
