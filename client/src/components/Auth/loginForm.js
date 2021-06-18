@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./common.css";
 import validate from "./validate";
+import { Link } from "react-router-dom";
 
 export function LoginForm(props) {
   const { switchToSignup } = props;
@@ -72,12 +73,12 @@ export function LoginForm(props) {
       <a className="MutedLink" href="#" style={{ marginTop: "5px" }}>
         Forget your password?
       </a>
-      <a className="MutedLink" href="#">
+      <Link to="/auth/signup" className="MutedLink">
         Don't have an accoun?{" "}
-        <span className="BoldLink" href="#" onClick={switchToSignup}>
+        <span className="BoldLink" onClick={switchToSignup}>
           Signup
         </span>
-      </a>
+      </Link>
     </div>
   );
 }

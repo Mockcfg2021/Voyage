@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import { LoginForm } from "./loginForm";
 import { motion } from "framer-motion";
 import SignupForm from "./signupForm.js";
@@ -27,6 +27,7 @@ const expandingTransition = {
 };
 
 export function Auth(props) {
+  //console.log(props.active)
   const [isExpanded, setExpanded] = useState(false);
   const [active, setActive] = useState("signin");
 
@@ -54,11 +55,11 @@ export function Auth(props) {
   //const contextValue = { switchToSignup, switchToSignin };
 
   return (
-      <div className="RootContainer">
-        <div>
+      <div className="RootContainer row ">
+        <div className="col-md-6" >
           <img src={background_image} alt="Human" width="400px" />
         </div>
-        <div className="BoxContainer">
+        <div className="BoxContainer col-md-6 ">
           <div className="TopContainer">
             <motion.div
               className="BackDrop"

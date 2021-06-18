@@ -9,12 +9,9 @@ export default function validate(values) {
     errors.userName =
       "User Name can only contain letters,numbers and underscore";
   }
-  //string to be more than 0 chars
   if (!values.email) {
     errors.email = "Email address is required";
-  }
-  //need the string to be an email
-  else if (
+  } else if (
     !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(values.email)
   ) {
     errors.email = "Email address is invalid";
