@@ -1,19 +1,26 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const port = 3000;
+var admin = require("firebase-admin");
+admin.initializeApp();
 
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 const conn = require("./firebase_connect");
-
+const firebase = conn;
+let db=admin.firestore();
 
 app.listen(port,function(err,data){
     if(err)
         console.log(err);
     else
         console.log("connected");
+});
+
+app.get("/", (req, res) => {
+    res.send("hi");
 });
 
 app.post("/register", (req, res) => {
@@ -25,6 +32,7 @@ app.post("/register", (req, res) => {
   .then((userCredential) => {
       const user = userCredential.user;
       user_id = user.uid;
+      res.json({uid : user_id, err_msg : null});
     })
     .catch((error) => {
       var errorCode = error.code;
@@ -33,8 +41,8 @@ app.post("/register", (req, res) => {
       // ..
     });
 
-    if(user_id != null){
-        let docRef=db.collection('Users').doc(user_id).set({
+app.post("/details/:id", (req, res) => {
+        let docRef=db.collection('Users').doc(req.params.id).set({
             email:req.body.user.email,
             age:req.body.user.age
         }).then(() => {
@@ -43,7 +51,18 @@ app.post("/register", (req, res) => {
         .catch((error) => {
             res.json({uid : null, err_msg : error});
         });
-    }
+    });
+    // if(user_id != null){
+        // let docRef=db.collection('Users').doc(user_id).set({
+        //     email:req.body.user.email,
+        //     age:req.body.user.age
+        // }).then(() => {
+        //     res.json({uid : user_id, err_msg : null});
+        // })
+        // .catch((error) => {
+        //     res.json({uid : null, err_msg : error});
+        // });
+    
 });
 
 app.post("/login", (req, res) => {
