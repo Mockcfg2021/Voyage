@@ -75,10 +75,10 @@ app.post("/login", (req, res) => {
   });
 });
 
-app.put("/editUser/:uid", (req, res) => {
-    db.collection('Users').doc(req.params.uid).update({
-        email:req.body.user.email,
-        age:req.body.user.age
+app.put("/editUser", (req, res) => {
+    db.collection('Users').doc(req.body.uid).update({
+        email:req.body.email,
+        age:req.body.age
       }).then(() => {
         res.json({msg : "Document successfully updated!", err : null});
     })
