@@ -17,7 +17,7 @@ phases:
 
 artifacts:
   files:
-    - "**/*"
+    - "client/**/*"
   discard-paths: no
   base-directory: client
 
