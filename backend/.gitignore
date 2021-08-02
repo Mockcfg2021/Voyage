@@ -1,4 +1,4 @@
 node_modules
+.env
+firebase_connect.js
 package-lock.json
-package.json
-cfg-2021-team-29-firebase-adminsdk-wwl5c-9c48e5dabc.json

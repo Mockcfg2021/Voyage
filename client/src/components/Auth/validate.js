@@ -36,5 +36,15 @@ export default function validate(values) {
   } else if (values.confirmPassword !== values.password) {
     errors.confirmPassword = "Passwords don't match";
   }
+
+  if(!values.school){
+    errors.school="School Name is required"
+  }
+
+  if(values.role=="none"){
+    errors.role="Please enter your role"
+  }
+
   return errors;
+
 }

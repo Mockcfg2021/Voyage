@@ -14,6 +14,8 @@ function SignupForm(props) {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "",
+    school: "",
   });
   const [errors, setErrors] = useState({});
   const handleChange = (e) => {
@@ -31,7 +33,9 @@ function SignupForm(props) {
       !errors.password &&
       !errors.confirmPassword &&
       !errors.number &&
-      !errors.userName
+      !errors.userName &&
+      !errors.school &&
+      !errors.role
     ) {
       axios
         .post("http://localhost:5000/register", {
@@ -40,21 +44,24 @@ function SignupForm(props) {
           email: values.email,
           password: values.password,
           confirmPassword: values.confirmPassword,
+          role:values.role,
+          school:values.school
         })
         .then((res) => {
-          console.log(res.data.err_msg);
+          console.log(res.data);
           setUid(res.data.uid);
           setError(res.data.err_msg);
           if (res.data.uid) {
             localStorage.setItem("userId", JSON.stringify(res.data.uid));
-            history.push("/");
+            localStorage.setItem("role", JSON.stringify(res.data.role));
+            history.push("/resources");
           }
         })
         .catch((error) => console.log(error));
     }
   };
 
-  //console.log(values);
+  console.log(values);
   //console.log(errors);
   return (
     <>
@@ -108,6 +115,43 @@ function SignupForm(props) {
               <label htmlFor="number">Contact Number </label>
             )}
           </div>
+          <div className="dropdown" style={{ marginTop: "0px" }}>
+            <select
+              className=" Input category-btn"
+              id="categoryList"
+              style={{ color: "rgba(200, 200, 200, 1)" }}
+              onChange={handleChange}
+              value={values.role}
+              name="role"
+            >
+              <option value="" selected disabled hidden  >
+                Your role
+              </option>
+              <option value="Teacher" >Teacher</option>
+              <option value="Leader" >Leader</option>
+              <option value="NGO">NGO</option>
+            </select>
+          </div>
+          {values.role !== "NGO" && values.role!=="" ? (
+            <div className="form-label-group">
+              <input
+                className="Input"
+                type="text"
+                id="school"
+                placeholder="School"
+                name="school"
+                required
+                onChange={handleChange}
+              />
+              {errors.school ? (
+                <label htmlFor="school" style={{ color: "red" }}>
+                  {errors.school}
+                </label>
+              ) : (
+                <label htmlFor="school">School Name</label>
+              )}
+            </div>
+          ) : null}
           <div className="form-label-group">
             <input
               className="Input"

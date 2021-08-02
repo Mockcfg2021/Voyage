@@ -18,6 +18,7 @@ export function LoginForm(props) {
   const handleChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
     setErrors({});
+    setError("")
   };
 
   const handleSubmit = (event) => {
@@ -36,13 +37,15 @@ export function LoginForm(props) {
           setError(res.data.err_msg);
           if (res.data.uid) {
             localStorage.setItem("userId", JSON.stringify(res.data.uid));
-            history.push("/");
+            localStorage.setItem("role", JSON.stringify(res.data.role));
+            history.push("/resources");
           }
         }).catch((err)=>console.log(err));
     }
   };
 
   const handleForgotPassword = (e) => {
+    
     swal(
       "",
       "Please check your mail and follow the link to reset your password.",

@@ -1,0 +1,76 @@
+.Game__score {
+    text-align: right;
+    color: #7a9e9f;
+    font-weight: 700;
+    display: inline-block;
+    width:100%;
+  }
+  .Game__error,
+  .Game__success {
+    color: red;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px 0;
+    background-color: rgba(255, 0, 0, 0.207);
+  }
+  .Game__success {
+    color: #fff;
+    background-color: rgba(0, 128, 0, 0.399);
+  }
+  .Game__question {
+    color: #1a1a1a;
+    font-size: 20px;
+  }
+  .Game__input_answer {
+    width: 20.4rem;
+    height: 3rem;
+    display: block;
+    border: none;
+    border-radius: 1rem;
+    font-size: 1.4rem;
+    padding-left: 1.4rem;
+    box-shadow: 0.1rem 0.1rem 0.1rem #c8d0e7eb,0.1rem 0.1rem 1rem #c8d0e7eb;
+    background: none;
+    color: #7a9e9f;
+    margin: 50px auto;
+    outline: none;
+  }
+  .Game__input_answer input::placeholder {
+    color: #bec8e482;
+  }
+  input:focus {
+    box-shadow: 0.1rem 0.1rem 0.1rem #c8d0e7eb,0.1rem 0.1rem 1rem #c8d0e7eb;
+  }
+  .Game__start,
+  .Game__submit {
+    width: 25%;
+    height: 4rem;
+    font-size: 20px;
+    margin: 10px;
+    border-radius: 0.5rem;
+    justify-self: center;
+    display: inline;
+    outline: none;
+    border: none;
+    cursor: pointer;
+  }
+  .Game__start {
+    background: #7a9e9f;
+    box-shadow: 0.1rem 0.1rem 0.1rem #c8d0e7eb,0.1rem 0.1rem 1rem #c8d0e7eb;;
+    color: #e4ebf5;
+  }
+
+  .Game__main_container {
+    width: 60%;
+    height: 75%;
+    margin: auto;
+    margin-top: 20px;
+    box-shadow: 0.2rem 0.2rem 1rem #c8d0e7eb, 0.2rem 0.2rem 1rem #c8d0e7eb;
+    padding: 2rem;
+  }
+  .Game__heading{
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    color: #7a9e9f;
+  }

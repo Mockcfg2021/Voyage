@@ -4,6 +4,8 @@ import background_image from "../../assets/auth_background.png";
 import "./index.css";
 import swal from '@sweetalert/with-react';
 import { useHistory } from "react-router";
+import axios from "axios";
+
 
 export default function ForgotPassword() {
   const [values, setValues] = useState({
@@ -22,6 +24,25 @@ export default function ForgotPassword() {
     setErrors(validate(values));
     console.log(errors);
     if(!errors.password && !errors.confirmPassword){
+      axios
+        .post("http://localhost:5000/register", {
+          userName: values.userName,
+          number: values.number,
+          email: values.email,
+          password: values.password,
+          confirmPassword: values.confirmPassword,
+        })
+        .then((res) => {
+          console.log(res.data.err_msg);
+        //   setUid(res.data.uid);
+        //   setError(res.data.err_msg);
+          if (res.data.uid) {
+            localStorage.setItem("userId", JSON.stringify(res.data.uid));
+            localStorage.setItem("role", JSON.stringify(res.data.role));
+            history.push("/");
+          }
+        })
+        .catch((error) => console.log(error));
         swal("","Your password has been resetted.","success").then(()=>{
             history.push("/auth/signin");
         })
